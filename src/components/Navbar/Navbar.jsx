@@ -15,7 +15,7 @@ const Navbar = () => {
       Bhati Mart
     </Typography>
     <div className={classes.grow}/>
-    <div className={classes}>
+    <div className={classes.button}>
     <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
         <Badge badgeContent={2} color="secondary">
         <ShoppingCart/>
