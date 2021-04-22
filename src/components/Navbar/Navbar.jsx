@@ -3,9 +3,9 @@ import {AppBar,Toolbar,MenuIcon,IconButton,Button,Typography,Badge,Menu} from '@
 import { ShoppingCart } from '@material-ui/icons';
 import useStyles from './style';
 import logo from '../../assets/ecommerce.png';
-const Navbar = () => {
+const Navbar = ({totalItem}) => {
     const classes=useStyles();
- 
+  console.log(totalItem)
     return (
         <>
            <AppBar position="fixed" className={classes.appBar} color="inherit">
@@ -17,7 +17,7 @@ const Navbar = () => {
     <div className={classes.grow}/>
     <div className={classes.button}>
     <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
-        <Badge badgeContent={2} color="secondary">
+        <Badge badgeContent={totalItem} color="secondary">
         <ShoppingCart/>
         </Badge>
     </IconButton>

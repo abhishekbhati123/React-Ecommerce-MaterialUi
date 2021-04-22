@@ -10,7 +10,7 @@ import useStyles from './styles';
 // ]
 
 //in this component we make product layout
-const Products = ({products}) => {
+const Products = ({products,onAddToCart}) => {
     // console.log(products)
     const classes=useStyles()
     return (
@@ -22,7 +22,7 @@ const Products = ({products}) => {
                     products.map((product)=>(
                         //pass data from products(parent) to product(child)
                         <Grid item key={product.id} xs={12} sm={6} md={4} lg={3}>
-                            <Product product={product}/>
+                            <Product product={product} onAddToCart={onAddToCart} />
                         </Grid>
     ))
                 }
