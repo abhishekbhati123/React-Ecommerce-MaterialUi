@@ -2,9 +2,11 @@ import React,{useState,useEffect} from 'react';
 import Products from './components/Products/Products';
 import Navbar from './components/Navbar/Navbar';
 import Cart from './components/Cart/Cart';
+import Checkout from './components/CheckoutForm/Checkout/Checkout';
 import {commerce} from './lib/Ecommerce';
 import {BrowserRouter as Router,Switch,Route} from 'react-router-dom'
 import { Remove } from '@material-ui/icons';
+
 const App = () => {
     //Now we are going to fetch/load data from commerce api so to store that data we need state
     const [products,setProduct]=useState([]); 
@@ -63,12 +65,15 @@ const App = () => {
         <div>
       <Navbar totalItem={cart.total_items}/>      
       <Switch>
-      <Route exact path="/">
+      <Route exact path="/"> 
       {/* here we pass handledAddToCart function as a props */}
      <Products products={products} onAddToCart={handledAddToCart} />
     </Route>
     <Route exact path="/cart">
      <Cart cart={cart} handleUpdateCartEntry={handleUpdateCartEntry} handleRemoveCart={handleRemoveCart} handleEmptyCart={handleEmptyCart}/>
+     </Route>
+     <Route>
+         <Checkout  cart={cart} />
      </Route>
      </Switch>
         </div>
