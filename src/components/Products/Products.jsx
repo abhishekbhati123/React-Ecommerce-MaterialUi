@@ -1,5 +1,5 @@
 import React from 'react';
-import {Grid} from '@material-ui/core';
+import {Grid,TextField} from '@material-ui/core';
 import Product from './Product/Product';
 import useStyles from './styles';
 
@@ -10,7 +10,7 @@ import useStyles from './styles';
 // ]
 
 //in this component we make product layout
-const Products = ({products,onAddToCart}) => {
+const Products = ({currentProducts,onTextFieldChange,onAddToCart,textField}) => {
     // console.log(products)
     const classes=useStyles()
     return (
@@ -18,8 +18,9 @@ const Products = ({products,onAddToCart}) => {
             {/* //here we use self closing div to give space to the content below navbar */}
             <div className={classes.toolbar}/>
            <Grid container justify="center" spacing={4}>
+           <TextField id="outlined-basic" label="Outlined" value={textField} onChange={(e)=>onTextFieldChange(e)}/>
                 {
-                    products.map((product)=>(
+                    currentProducts.map((product)=>(
                         //pass data from products(parent) to product(child)
                         <Grid item key={product.id} xs={12} sm={6} md={4} lg={3}>
                             <Product product={product} onAddToCart={onAddToCart} />

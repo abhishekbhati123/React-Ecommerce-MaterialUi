@@ -12,10 +12,15 @@ const App = () => {
     const [products,setProduct]=useState([]); 
     const [currentProducts,setCurrentProducts]=useState([])
     const [cart,setCart]=useState({});
+    const [order,setOrder]=useState({})
+    const [errorMessage, setErrorMessage] = useState('');
+    const [textField,setTextField]=useState('')
 
     //here we make a function to fetch the data from ecommerce
    //here we gonna use await and async to write cleaner code
    //and we also destrure the data from thr commerce instance
+
+
 
     const fetchProduct= async () =>{
         const {data}=await commerce.products.list();
@@ -25,6 +30,19 @@ const App = () => {
         console.log(data);
     }
 
+    //here we make a function for the search
+    const onTextFieldChange=(e)=>{
+        var value =e.target.value.toLowerCase();
+        console.log(value);
+        setTextField(value);
+        //we need to make a copy of products
+        const productCopy=[...products];
+        const newProduct=productCopy.filter((user)=>{
+            const name=user.name.toLowerCase();
+            return name.startsWith(value)
+        })
+        setCurrentProducts(newProduct)
+    }
     //in this function with the using helper function(retrieve) of commerce.js we will be create a cart 
     const createCart=  async () =>{
        
@@ -54,6 +72,22 @@ const App = () => {
         const response=await commerce.cart.empty();
         setCart(response.cart)
     }
+    const refershCart=async()=>{
+     const newCart=   await commerce.cart.refresh();
+     setCart(newCart);
+    }
+//    to capture an order and payment by providing the checkout token and necessary data for the order to be completed. 
+    const handleCaptureCheckout= async(checkoutTokenId,newOrder)=>{
+        try{
+            const incomingOrder=await commerce.checkout.capture(checkoutTokenId,newOrder)
+            setOrder(incomingOrder);
+            refershCart();
+        }
+        catch(error){
+            setErrorMessage(error.data.error.message);
+        }
+    }
+
     useEffect(()=>{
         fetchProduct();
         createCart();
@@ -67,13 +101,13 @@ const App = () => {
       <Switch>
       <Route exact path="/"> 
       {/* here we pass handledAddToCart function as a props */}
-     <Products products={products} onAddToCart={handledAddToCart} />
+     <Products currentProducts={currentProducts} textField={textField} onTextFieldChange={onTextFieldChange}  onAddToCart={handledAddToCart} />
     </Route>
     <Route exact path="/cart">
-     <Cart cart={cart} handleUpdateCartEntry={handleUpdateCartEntry} handleRemoveCart={handleRemoveCart} handleEmptyCart={handleEmptyCart}/>
+     <Cart cart={cart} order={order} handleUpdateCartEntry={handleUpdateCartEntry} handleRemoveCart={handleRemoveCart} handleEmptyCart={handleEmptyCart}/>
      </Route>
      <Route>
-         <Checkout  cart={cart} />
+         <Checkout  cart={cart}  order={order} handleCaptureCheckout={handleCaptureCheckout} error={errorMessage}/>
      </Route>
      </Switch>
         </div>

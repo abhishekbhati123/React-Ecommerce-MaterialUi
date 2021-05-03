@@ -7,9 +7,10 @@ import {commerce} from '../../../lib/Ecommerce'
 
 
 const steps=["Shipping Address","Payment Details"];
-const Checkout = ({cart}) => {
+const Checkout = ({cart,order,handleCaptureCheckout,error}) => {
     const [activeStep,setActiveStep]=useState(0);
     const [checkoutToken,setCheckoutToken]=useState(null);
+    const [shippingData,setShippingData]=useState({});
     const classes=useStyles();
     useEffect(()=>{
         const generateToken=async()=>{
@@ -24,7 +25,18 @@ const Checkout = ({cart}) => {
         }
      }
      generateToken()
-    },[]);
+    },[cart]);
+
+    const nextStep=()=>setActiveStep((preActiveStep)=>preActiveStep+1)
+    const backStep=()=>setActiveStep((preActiveStep)=>preActiveStep-1)    
+    
+    //we want shipping data according that we are shifting to the payment form
+    const next=(data)=>{
+        //this data we are get from AddressForm
+                setShippingData(data);
+                nextStep();
+    }
+
     const Confirmation=()=>(
         <div>
             confirmation
@@ -32,7 +44,7 @@ const Checkout = ({cart}) => {
     )
     const Form=()=>
     //here we pass checkoutOutToken as a props to the AddressForm
-        activeStep===0?<AddressForm checkoutToken={checkoutToken}/>:<PaymentForm/>
+        activeStep===0?<AddressForm next={next} checkoutToken={checkoutToken} />:<PaymentForm shippingData={shippingData} checkoutToken={checkoutToken} nextStep={nextStep} backStep={backStep}   handleCaptureCheckout={handleCaptureCheckout}/>
     
 
    //here we write a function to generate an token,here we pass two parameter first is cart id and second is type of token

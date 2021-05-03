@@ -1,5 +1,6 @@
 import React,{useState,useEffect} from "react";
 import { commerce } from '../../lib/Ecommerce';
+
 import {
   InputLabel,
   Select,
@@ -11,7 +12,7 @@ import {
 import {Link} from "react-router-dom";                                
 import { useForm, FormProvider } from "react-hook-form";
 import CustomTextField from "./CustomTextField";
-const AddressForm = ({checkoutToken}) => {
+const AddressForm = ({checkoutToken,next}) => {
   //here we define initial state for shipping country,shipping subdivision,and shipping options
   const [shipingCountries,setShippingCountries]=useState([]);
   const [shipingCountry,setShippingCountry]=useState('');
@@ -64,7 +65,7 @@ useEffect(()=>{
     <>
       <Typography variant="h6">sHIPPING address</Typography>
       <FormProvider {...method}>
-        <form onSubmit="">
+        <form onSubmit={method.handleSubmit((data)=>next({...data,shipingCountry,shipingSubdivision,shipingOption}))}>
           <Grid conatiner spacing={3}>
             <CustomTextField required name="firstName" label="First name" />
             <CustomTextField required name="lastName" label="Last name" />
@@ -108,7 +109,12 @@ useEffect(()=>{
               </Select>
             </Grid>
           </Grid>
-        </form>
+          <br/>
+          <div style={{display:'flex',justifyContent:'space-between'}}>
+            <Button component={Link} to="/cart" variant="outlined">Back to cart</Button>
+            <Button type="submit" variant="contained" color="primary">Next</Button>
+            </div>
+      </form>
       </FormProvider>
     </>
   );
