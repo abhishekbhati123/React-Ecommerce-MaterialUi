@@ -6,8 +6,18 @@ import Checkout from './components/CheckoutForm/Checkout/Checkout';
 import {commerce} from './lib/Ecommerce';
 import {BrowserRouter as Router,Switch,Route} from 'react-router-dom'
 import { Remove } from '@material-ui/icons';
+import './app.css';
+
+
 
 const App = () => {
+    //now we definig some variable
+// //here i am defining that how many item i want in a page 
+// const Per_Page=3;
+// //here we define an constant variable to know how many pages we previously visited already
+// const visitedPages=currentPage*Per_Page;
+
+    
     //Now we are going to fetch/load data from commerce api so to store that data we need state
     const [products,setProduct]=useState([]); 
     const [currentProducts,setCurrentProducts]=useState([])
@@ -15,6 +25,9 @@ const App = () => {
     const [order,setOrder]=useState({})
     const [errorMessage, setErrorMessage] = useState('');
     const [textField,setTextField]=useState('')
+    // //here we defining the state for cuurent page which selected by user initialy
+    // const [currentPage,setCurrentPage]=useState(0);
+
 
     //here we make a function to fetch the data from ecommerce
    //here we gonna use await and async to write cleaner code
@@ -97,7 +110,7 @@ const App = () => {
     return (
         <Router>
         <div>
-      <Navbar totalItem={cart.total_items}/>      
+      <Navbar totalItem={cart.total_items} onTextFieldChange={onTextFieldChange} textField={textField}/>      
       <Switch>
       <Route exact path="/"> 
       {/* here we pass handledAddToCart function as a props */}

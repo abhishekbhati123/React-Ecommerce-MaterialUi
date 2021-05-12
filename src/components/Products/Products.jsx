@@ -1,7 +1,8 @@
-import React from 'react';
-import {Grid,TextField} from '@material-ui/core';
-import Product from './Product/Product';
-import useStyles from './styles';
+import React ,{useState}from "react";
+import { Grid} from "@material-ui/core";
+import Product from "./Product/Product";
+import useStyles from "./styles";
+import ReactPaginate from "react-paginate";
 
 //Mock prducts array
 // const products=[
@@ -10,26 +11,49 @@ import useStyles from './styles';
 // ]
 
 //in this component we make product layout
-const Products = ({currentProducts,onTextFieldChange,onAddToCart,textField}) => {
-    // console.log(products)
-    const classes=useStyles()
-    return (
-        <main className={classes.content}>
-            {/* //here we use self closing div to give space to the content below navbar */}
-            <div className={classes.toolbar}/>
-           <Grid container justify="center" spacing={4}>
-           <TextField id="outlined-basic" label="Outlined" value={textField} onChange={(e)=>onTextFieldChange(e)}/>
-                {
-                    currentProducts.map((product)=>(
-                        //pass data from products(parent) to product(child)
-                        <Grid item key={product.id} xs={12} sm={6} md={4} lg={3}>
-                            <Product product={product} onAddToCart={onAddToCart} />
-                        </Grid>
-    ))
-                }
-           </Grid>
-        </main>
-    )
-}
+const Products = ({ currentProducts, onAddToCart }) => {
+//here currentpage initialize with o is indicate that currently which page is selected
+    const [currentPage,setCurrentPage]=useState(0);
+    const per_Page=3;
+    const visited_Pages=currentPage*per_Page;
 
-export default Products
+    // const currentPageData=currentProducts.slice(visited_Pages,visited_Pages + per_Page).map(({thumburl})=><img src={thumburl}/>);
+    const pageCount=Math.ceil(currentProducts.length/per_Page)
+    // //here we calculate number of item which  hass been displayed already by the previuos pages.
+    // const pageCount = '';
+  // console.log(products)
+  const classes = useStyles();
+  function handlePageClick({ selected: selectedPage }) {
+    setCurrentPage(selectedPage);
+}
+  return (
+    <main className={classes.content}>
+      {/* //here we use self closing div to give space to the content below navbar */}
+      <div className={classes.toolbar} />
+      <Grid container justify="center" spacing={4}>
+        {currentProducts.slice(visited_Pages,visited_Pages+per_Page).map((product) => (
+          //pass data from products(parent) to product(child)
+          <Grid item key={product.id} xs={12} sm={6} md={4} lg={3}>
+            <Product product={product} onAddToCart={onAddToCart} />
+          </Grid>
+        ))}
+       
+      </Grid>
+       <ReactPaginate
+          previousLabel={"← Previous"}
+          nextLabel={"Next →"}
+          pageCount={pageCount}
+          onPageChange={handlePageClick}
+          containerClassName={"pagination"}
+          previousLinkClassName={"pagination__link"}
+          nextLinkClassName={"pagination__link"}
+          disabledClassName={"pagination__link--disabled"}
+          activeClassName={"pagination__link--active"}
+        />
+      {/* {currentPageData} */}
+    </main>
+    
+  );
+};
+
+export default Products;

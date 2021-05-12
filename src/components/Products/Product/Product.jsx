@@ -23,8 +23,8 @@ const Product = ({product,onAddToCart}) => {
                                 
                             </Typography>
                         </div>
-                        <Typography variant="body2" colo="textSecondary">
-                                
+                        <Typography variant="body2" colo="primary">
+                                {product.price.formatted_with_symbol}
                             </Typography>
                        
                     </CardContent>
